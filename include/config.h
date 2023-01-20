@@ -48,3 +48,7 @@ emyPxgcYxn/eR44/KJ4EBs+lVDR3veyJm+kXQ99b21/+jh5Xos1AnX5iItreGCc=\n\
 //#define PAPER_ESP_OK_SLEEP (1 * 60 * 60 * 1e6)
 #define PAPER_ESP_OK_SLEEP (60 * 1e6)
 #define PAPER_ESP_ERROR_SLEEP (60 * 1e6)
+
+#define PAPER_POWER_PIN     21
+#define PAPER_POWER_PIN_ON  HIGH
+#define PAPER_POWER_PIN_OFF HIGH

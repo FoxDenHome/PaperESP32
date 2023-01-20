@@ -30,11 +30,14 @@ WiFiClientSecure client;
 RTC_DATA_ATTR char token[128];
 
 void setup() {
+  #ifdef PAPER_POWER_PIN
+  pinMode(PAPER_POWER_PIN, OUTPUT);
+  #endif
+
   Serial.begin(115200);
 
   SPI.end();
   SPI.begin(EPD_CLK, EPD_DOUT, EPD_DIN, EPD_CS);
-  display.init(115200);
 
   display_buffer = (uint8_t*)buffer_malloc(display_buffer_size);
 
@@ -115,16 +118,33 @@ static bool drawNextImage() {
 
   Serial.println("Downloading complete. Drawing image...");
   display.drawNative(display_buffer, 0, 0, 0, display.width(), display.height(), false, false, false);
-  display.hibernate();
-  Serial.println("All done!");
+  Serial.println("Drawing done!");
   return true;
 }
 
 void loop() {
-  if (!drawNextImage()) {
-    PaperESPSleep(PAPER_ESP_ERROR_SLEEP);
-    return;
-  }
+  Serial.println("Begin loop()");
 
-  PaperESPSleep(PAPER_ESP_OK_SLEEP);
+  #ifdef PAPER_POWER_PIN
+  digitalWrite(PAPER_POWER_PIN, PAPER_POWER_PIN_ON);
+  #endif
+  display.init(115200);
+
+  unsigned long sleepTime = PAPER_ESP_ERROR_SLEEP;
+  Serial.println("Begin drawNextImage()");
+  if (drawNextImage()) {
+    sleepTime = PAPER_ESP_OK_SLEEP;
+  }
+  Serial.println("End drawNextImage()");
+
+  Serial.println("Begin display.hibernate()");
+  display.hibernate();
+  Serial.println("End display.hibernate()");
+
+  #ifdef PAPER_POWER_PIN
+  digitalWrite(PAPER_POWER_PIN, PAPER_POWER_PIN_OFF);
+  #endif
+
+  Serial.println("End loop()");
+  PaperESPSleep(sleepTime);
 }
