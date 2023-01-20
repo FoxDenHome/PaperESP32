@@ -43,8 +43,8 @@ emyPxgcYxn/eR44/KJ4EBs+lVDR3veyJm+kXQ99b21/+jh5Xos1AnX5iItreGCc=\n\
 #define EPD_BUSY 5
 #define EPD_DOUT 11 // not used
 
-//#define PaperESPSleep delayMicroseconds
-#define PaperESPSleep ESP.deepSleep
-#define PAPER_ESP_OK_SLEEP (1 * 60 * 60 * 1e6)
-//#define PAPER_ESP_OK_SLEEP (60 * 1e6)
+#define PaperESPSleep delayMicroseconds
+//#define PaperESPSleep ESP.deepSleep
+//#define PAPER_ESP_OK_SLEEP (1 * 60 * 60 * 1e6)
+#define PAPER_ESP_OK_SLEEP (60 * 1e6)
 #define PAPER_ESP_ERROR_SLEEP (60 * 1e6)

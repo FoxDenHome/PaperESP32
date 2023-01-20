@@ -2,6 +2,8 @@
 
 from PIL import Image
 from argparse import ArgumentParser
+from io import BytesIO
+from base64 import b64encode
 
 """
 1.	Black	0b000	0x0	0,0,0
@@ -11,16 +13,28 @@ from argparse import ArgumentParser
 5.	Red	0b100	0x4	255,0,0
 6.	Yellow	0b101	0x5	255,255,0
 7.	Orange	0b110	0x6	255,128,0
+8.      Secret purple/pink-ish
 """
 
+#PALLETTE = [
+#    0, 0, 0,
+#    255, 255, 255,
+#    0, 255, 0,
+#    0, 0, 255,
+#    255, 0, 0,
+#    255, 255, 0,
+#    255, 128, 0,
+#]
+
 PALLETTE = [
-    0, 0, 0,
-    255, 255, 255,
-    0, 255, 0,
-    0, 0, 255,
-    255, 0, 0,
-    255, 255, 0,
-    255, 128, 0,
+	0, 0, 0,
+	255, 255, 255,
+	67, 138, 28,
+	100, 64, 255,
+	191, 0, 0,
+	255, 243, 56,
+	232, 126, 0,
+	194 ,164, 244,
 ]
 
 TARGET_WIDTH = 600
@@ -32,6 +46,7 @@ def main():
     parser.add_argument("src", help="Source image")
     parser.add_argument("dst", help="Destination file")
     parser.add_argument("--save-intermediate", help="Save intermediate file", default="")
+    parser.add_argument("--show", help="Show image preview", action="store_true", default=False)
     args = parser.parse_args()
 
     tmp_byte = bytearray()
@@ -47,7 +62,7 @@ def main():
             target_width = img.height * TARGET_RATIO
             img = img.crop(((img.width - target_width) / 2, 0, (img.width + target_width) / 2, img.height))
         elif image_ratio < TARGET_RATIO:
-            target_height = img.width * TARGET_RATIO
+            target_height = img.width * (1.0 / TARGET_RATIO)
             img = img.crop((0, (img.height - target_height) / 2, img.width, (img.height + target_height) / 2))
 
         print("Resizing image...")
@@ -65,6 +80,14 @@ def main():
     if args.save_intermediate:
         print("Saving intermediate file...")
         processed_img.save(args.save_intermediate)
+
+    if args.show:
+        print("Preview: ", flush=True)
+        b = BytesIO()
+        processed_img.save(b, "PNG")
+        data = b.getvalue()
+        b64data = b64encode(data).decode("utf-8")
+        print(f"\033]1337;File=inline=1;name={args.src}-epaper.png;size={len(data)}:{b64data}\a", flush=True)
 
     print("Saving binary file...")
     with open(args.dst, "wb") as out:
