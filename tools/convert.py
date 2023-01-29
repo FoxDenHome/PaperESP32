@@ -40,6 +40,7 @@ PALLETTE = [
 TARGET_WIDTH = 600
 TARGET_HEIGHT = 448
 TARGET_RATIO = TARGET_WIDTH / TARGET_HEIGHT
+ROTATION = 180
 
 def main():
     parser = ArgumentParser()
@@ -64,6 +65,9 @@ def main():
         elif image_ratio < TARGET_RATIO:
             target_height = img.width * (1.0 / TARGET_RATIO)
             img = img.crop((0, (img.height - target_height) / 2, img.width, (img.height + target_height) / 2))
+
+        print("Rotating image...")
+        img = img.rotate(ROTATION)
 
         print("Resizing image...")
         img = img.resize((TARGET_WIDTH, TARGET_HEIGHT))

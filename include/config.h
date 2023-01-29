@@ -35,13 +35,16 @@ mRGunUHBcnWEvgJBQl9nJEiU0Zsnvgc/ubhPgXRR4Xq37Z0j4r7g1SgEEzwxA57d\n\
 emyPxgcYxn/eR44/KJ4EBs+lVDR3veyJm+kXQ99b21/+jh5Xos1AnX5iItreGCc=\n\
 -----END CERTIFICATE-----"
 
-#define EPD_DIN 17
-#define EPD_CLK 18
-#define EPD_CS 14
-#define EPD_DC 12
-#define EPD_RST 6
-#define EPD_BUSY 5
-#define EPD_DOUT 11 // not used
+#define EPAPER_RST_PIN  19
+#define EPAPER_DC_PIN   33
+#define EPAPER_CS_PIN   27
+#define EPAPER_BUSY_PIN 32
+#define EPAPER_CLK      18
+#define EPAPER_DIN      23
+
+#define PAPER_POWER_PIN     21
+#define PAPER_POWER_PIN_ON  HIGH
+#define PAPER_POWER_PIN_OFF HIGH
 
 #define PaperESPSleep delayMicroseconds
 //#define PaperESPSleep ESP.deepSleep
@@ -49,6 +52,5 @@ emyPxgcYxn/eR44/KJ4EBs+lVDR3veyJm+kXQ99b21/+jh5Xos1AnX5iItreGCc=\n\
 //#define PAPER_ESP_OK_SLEEP (60 * 1e6)
 #define PAPER_ESP_ERROR_SLEEP (60 * 1e6)
 
-#define PAPER_POWER_PIN     21
-#define PAPER_POWER_PIN_ON  HIGH
-#define PAPER_POWER_PIN_OFF HIGH
+//#define buffer_malloc malloc
+#define buffer_malloc ps_malloc

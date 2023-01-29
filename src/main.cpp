@@ -10,11 +10,10 @@
 #define GxEPD2_DRIVER_CLASS GxEPD2_565c
 
 // Set page height to 1 to ensure we allocate the least overhead possible, we don't need pages
-GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, 1> display(GxEPD2_DRIVER_CLASS(EPD_CS, EPD_DC, EPD_RST, EPD_BUSY));
+GxEPD2_DISPLAY_CLASS<GxEPD2_DRIVER_CLASS, 1> display(GxEPD2_DRIVER_CLASS(EPAPER_CS_PIN, EPAPER_DC_PIN, EPAPER_RST_PIN, EPAPER_BUSY_PIN));
 
 // Calculate bytes needed for buffer (+1 to force round up)
 const uint32_t display_buffer_size = ((display.height() * display.width()) + 1) / 2;
-#define buffer_malloc ps_malloc
 uint8_t* display_buffer;
 
 // Pixel format: 4-bit-per-pixel, indexed colors: 
@@ -37,7 +36,7 @@ void setup() {
   Serial.begin(115200);
 
   SPI.end();
-  SPI.begin(EPD_CLK, EPD_DOUT, EPD_DIN, EPD_CS);
+  SPI.begin(EPAPER_CLK, 0, EPAPER_DIN, EPAPER_CS_PIN);
 
   display_buffer = (uint8_t*)buffer_malloc(display_buffer_size);
 
